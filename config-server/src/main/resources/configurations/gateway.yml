@@ -16,5 +16,5 @@ spring:
         - id: utilisateurs
           uri: http://localhost:8090
           predicates:
-            - Path = /api/v1/utilisateurs/**
+            - Path=/api/v1/utilisateurs/**
 # here to add routes of other microserv

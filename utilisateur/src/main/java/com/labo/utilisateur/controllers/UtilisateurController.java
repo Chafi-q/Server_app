@@ -16,13 +16,32 @@ public class UtilisateurController {
 
     @PostMapping
     @ResponseStatus
-    public void save(@RequestBody Utilisateur utilisateur) {
-        utilisateurService.saveUtilisateur(utilisateur);
+    public void saveUser(@RequestBody Utilisateur utilisateur) {
+        utilisateurService.saveUser(utilisateur);
     }
 
     @GetMapping
-    public ResponseEntity<List<Utilisateur>> findAll() {
-        return ResponseEntity.ok(utilisateurService.findAllUtilisateurs());
+    public ResponseEntity<List<Utilisateur>> findAllUsers() {
+        return ResponseEntity.ok(utilisateurService.findAllUsers());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Utilisateur> findUserById (@PathVariable Integer id) {
+        return ResponseEntity.ok(utilisateurService.findUserById(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<Utilisateur> updateUser(@RequestBody Utilisateur utilisateur) {
+        return ResponseEntity.ok(utilisateurService.updateUser(utilisateur));
+    }
+
+    @DeleteMapping
+    public void deleteUser(@RequestBody Utilisateur utilisateur) {
+        utilisateurService.deleteUser(utilisateur);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUserById(@PathVariable Integer id) {
+        utilisateurService.deleteUserbyId(id);
+    }
 }

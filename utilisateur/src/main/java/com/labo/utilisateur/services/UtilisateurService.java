@@ -11,14 +11,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepo;
-    public void saveUtilisateur(Utilisateur utilisateur) {
+    public void saveUser(Utilisateur utilisateur) {
         utilisateurRepo.save(utilisateur);
     }
 
-    public List<Utilisateur> findAllUtilisateurs() {
+    public List<Utilisateur> findAllUsers() {
         return utilisateurRepo.findAll();
     }
+    public Utilisateur findUserById(Integer id){
+        return utilisateurRepo.getReferenceById(id);
+    }
+    public Utilisateur updateUser(Utilisateur utilisateur) {
+        Utilisateur user = new Utilisateur();
+        user.setEmail(utilisateur.getEmail());
+        user.setNomComplet(utilisateur.getNomComplet());
+        user.setProfession(utilisateur.getProfession());
+        user.setNumTel(utilisateur.getNumTel());
+        user.setSignature(utilisateur.getSignature());
+        user.setRole(utilisateur.getRole());
+        user.setIdLabo(utilisateur.getIdLabo());
 
+        return user;
+    }
+
+    public void deleteUser (Utilisateur utilisateur) {
+        utilisateurRepo.delete(utilisateur);
+    }
+    public void deleteUserbyId(Integer id) {
+        utilisateurRepo.deleteById(id);
+    }
 
 
 }

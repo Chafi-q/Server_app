@@ -33,7 +33,7 @@ jobs:
 
       - name: Build and Test All Services
         run: |
-          for service in utilisateurs config-server discovery-server gateway; do
+          for service in utilisateur config-server discovery-server gateway; do
             mvn -f $service/pom.xml clean install -DskipTests=false
           done
 

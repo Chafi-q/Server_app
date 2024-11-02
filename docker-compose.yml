@@ -64,7 +64,7 @@ services:
   utilisateurs:
     build: ./utilisateur
     environment:
-      SPRING_APPLICATION_NAME: utilisateurs
+      SPRING_APPLICATION_NAME: utilisateur
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/utilisateurs
       SPRING_DATASOURCE_USERNAME: postgres
@@ -77,7 +77,26 @@ services:
       - config-server
     volumes:
       - ./config/utilisateurs.yml:/config/utilisateurs.yml
-    command: ["java", "-jar", "/app/utilisateurs.jar", "--spring.config.location=classpath:/config/utilisateurs.yml"]
+    command: ["java", "-jar", "/app/utilisateur.jar", "--spring.config.location=classpath:/config/utilisateurs.yml"]
+
+  laboratoires:
+    build: ./laboratoire
+    environment:
+      SPRING_APPLICATION_NAME: laboratoire
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/laboratoires
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+      - discovery-server
+      - config-server
+    volumes:
+      - ./config/laboratoires.yml:/config/laboratoires.yml
+    command: ["java", "-jar", "/app/laboratoire.jar", "--spring.config.location=classpath:/config/laboratoires.yml"]
+
 
 volumes:
   postgres_data:

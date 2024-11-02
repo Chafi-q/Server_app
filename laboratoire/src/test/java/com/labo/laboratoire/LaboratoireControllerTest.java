@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.labo.laboratoire;
 
 import entities.Laboratoire;
 import services.LaboratoireService;

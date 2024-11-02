@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          services=(config-server discovery-server gateway utilisateurs)
+          services=(config-server discovery-server gateway utilisateur)
           for service in "${services[@]}"; do
             docker build -t myorg/$service:latest -f ./$service/Dockerfile ./$service
             docker push myorg/$service:$(date '+%Y-%m-%d-%H-%M-%S')

@@ -53,7 +53,7 @@ jobs:
           services=(config-server discovery-server gateway utilisateurs)
           for service in "${services[@]}"; do
             docker build -t myorg/$service:latest -f ./$service/Dockerfile ./$service
-            docker push myorg/$service:$(date-'%Y-%m-%d%H-%M-%S')
+            docker push myorg/$service:$(date '+%Y-%m-%d-%H-%M-%S')
           done
 
       - name: Deploy with Docker Compose

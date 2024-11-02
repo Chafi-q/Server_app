@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - br-mehdi
   pull_request:
     branches:
-      - main
+      - br-mehdi
 
 jobs:
   build-and-test:

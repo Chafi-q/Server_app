@@ -3,7 +3,8 @@ package com.labo.utilisateur.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Entity(name = "utilisateurs")
+@Data
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import lombok.*;
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String email;
     private String nomComplet;
     private String profession;

@@ -1,3 +1,4 @@
+# config-server.yml
 # used to externalize all configs
 server:
   port: 8888

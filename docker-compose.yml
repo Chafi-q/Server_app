@@ -1,25 +1,90 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_DB: utilisateurs
-      POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
+#  pgadmin:
+#    image: dpage/pgadmin4:latest
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    ports:
+#      - "5050:80"
+#    depends_on:
+#      - postgres
+
+  config-server:
+    image: myorg/config-server:latest
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      SPRING_PROFILES_ACTIVE: native
+      SPRING_APPLICATION_NAME: config-server
     ports:
-      - "5050:80"
+      - "8888:8888"
+    volumes:
+      - ./config/config-server.yml:/config/config-server.yml
+    command: ["java", "-jar", "/app/config-server.jar", "--spring.config.location=classpath:/config/config-server.yml"]
+
+  discovery-server:
+    image: myorg/discovery-server:latest
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: discovery-server
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'false'
+      EUREKA_CLIENT_FETCH_REGISTRY: 'false'
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    volumes:
+      - ./config/discovery-server.yml:/config/discovery-server.yml
+    command: ["java", "-jar", "/app/discovery-server.jar", "--spring.config.location=classpath:/config/discovery-server.yml"]
+
+  gateway:
+    image: myorg/gateway:latest
+    environment:
+      SPRING_APPLICATION_NAME: gateway
+      EUREKA_CLIENT_SERVICE_URL_REGISTER_WITH_EUREKA: 'false'
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: 'true'
+    ports:
+      - "8222:8222"
+    depends_on:
+      - discovery-server
+      - utilisateurs
+    volumes:
+      - ./config/gateway.yml:/config/gateway.yml
+    command: ["java", "-jar", "/app/gateway.jar", "--spring.config.location=classpath:/config/gateway.yml"]
+
+  utilisateurs:
+    image: myorg/utilisateurs:latest
+    environment:
+      SPRING_APPLICATION_NAME: utilisateurs
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/utilisateurs
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE: postgresql
+      APPLICATION_CONFIG_UTILISATEUR_URL: http://gateway:8222/api/v1/utilisateurs
+    ports:
+      - "8070:8070"
     depends_on:
       - postgres
+      - discovery-server
+      - config-server
+    volumes:
+      - ./config/utilisateurs.yml:/config/utilisateurs.yml
+    command: ["java", "-jar", "/app/utilisateurs.jar", "--spring.config.location=classpath:/config/utilisateurs.yml"]
+
 volumes:
   postgres_data:
     driver: local

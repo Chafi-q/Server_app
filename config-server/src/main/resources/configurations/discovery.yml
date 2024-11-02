@@ -1,3 +1,4 @@
+# discovery-server.yml
 eureka:
   instance:
     hostname: localhost

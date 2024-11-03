@@ -24,7 +24,7 @@ jobs:
           java-version: 21
       - name: Compile Project
         run: |
-          ./mvnw clean compile -pl config-server,discovery-server,gateway,laboratoire,utilisateur
+          mvn clean compile -pl config-server,discovery-server,gateway,laboratoire,utilisateur
 
   #  unit-test:
   #    name: Unit Tests

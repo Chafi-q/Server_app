@@ -52,6 +52,8 @@ jobs:
         run: |
           services=(config-server discovery-server gateway utilisateur)
           for service in "${services[@]}"; do
+            echo "Building and pushing image for $service"
+            ls -R ./$service # Optional debugging
             docker build -t myorg/$service:latest -f ./$service/Dockerfile ./$service
             docker push myorg/$service:$(date '+%Y-%m-%d-%H-%M-%S')
           done

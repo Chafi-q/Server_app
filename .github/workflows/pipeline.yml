@@ -57,24 +57,26 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build and Push Docker Images
+        env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           services=(config-server discovery-server gateway utilisateur)
           timestamp=$(date '+%Y%m%d%H%M%S')
           
           for service in "${services[@]}"; do
             echo "Building and pushing image for $service"
-            # Build the image
-            docker build -t myorg/$service:latest -t myorg/$service:$timestamp -f ./$service/Dockerfile ./$service
+            # Update image name to include Docker Hub username
+            docker build -t $DOCKER_USERNAME/$service:latest -t $DOCKER_USERNAME/$service:$timestamp -f ./$service/Dockerfile ./$service
             
             # Push both tags
-            docker push myorg/$service:latest
-            docker push myorg/$service:$timestamp
+            docker push $DOCKER_USERNAME/$service:latest
+            docker push $DOCKER_USERNAME/$service:$timestamp
           done
 
       - name: Deploy with Docker Compose

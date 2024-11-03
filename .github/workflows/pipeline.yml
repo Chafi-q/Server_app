@@ -85,7 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     env:
-          DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
 
     steps:
       - name: Checkout code
@@ -106,17 +107,17 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           echo "Building and pushing images"
-          docker build -t $DOCKER_REPO/config-server:latest -f ./config-server/Dockerfile ./config-server
-          docker build -t $DOCKER_REPO/discovery-server:latest -f ./discovery-server/Dockerfile ./discovery-server
-          docker build -t $DOCKER_REPO/gateway:latest -f ./gateway/Dockerfile ./gateway
-          docker build -t $DOCKER_REPO/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
-          docker build -t $DOCKER_REPO/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
+          docker build -t $DOCKER_USERNAME/$DOCKER_REPO/config-server:latest -f ./config-server/Dockerfile ./config-server
+          docker build -t $DOCKER_USERNAME/$DOCKER_REPO/discovery-server:latest -f ./discovery-server/Dockerfile ./discovery-server
+          docker build -t $DOCKER_USERNAME/$DOCKER_REPO/gateway:latest -f ./gateway/Dockerfile ./gateway
+          docker build -t $DOCKER_USERNAME/$DOCKER_REPO/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
+          docker build -t $DOCKER_USERNAME/$DOCKER_REPO/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
 
       - name: Push Docker Images
         run: |
-          docker push $DOCKER_REPO/config-server:latest
-          docker push $DOCKER_REPO/discovery-server:latest
-          docker push $DOCKER_REPO/gateway:latest
-          docker push $DOCKER_REPO/laboratoire:latest
-          docker push $DOCKER_REPO/utilisateur:latest
+          docker push $DOCKER_USERNAME/$DOCKER_REPO/config-server:latest
+          docker push $DOCKER_USERNAME/$DOCKER_REPO/discovery-server:latest
+          docker push $DOCKER_USERNAME/$DOCKER_REPO/gateway:latest
+          docker push $DOCKER_USERNAME/$DOCKER_REPO/laboratoire:latest
+          docker push $DOCKER_USERNAME/$DOCKER_REPO/utilisateur:latest
           

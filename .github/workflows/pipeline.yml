@@ -22,13 +22,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-          
-      - name: List directory contents
-        run: ls -la
-        
       - name: Compile Project
         run: |
-          mvn clean compile -pl config-server,discovery-server,gateway,laboratoire,utilisateur
+          mvn -f config-server clean compile
+          mvn -f discovery-server clean compile
+          mvn -f gateway clean compile
+          mvn -f laboratoire clean compile
+          mvn -f utilisateur clean compile
 
   #  unit-test:
   #    name: Unit Tests
@@ -47,7 +47,7 @@ jobs:
   #  # -pl flag stands for "project list"
   #      - name: Running Unit Tests
   #        run: |
-  #          ./mvnw clean test -pl utilisateur
+  #          ./mvnw -f utilisateur clean test 
 
   build:
     name: Build
@@ -66,7 +66,11 @@ jobs:
 
       - name: Build Project
         run: |
-          mvn clean package -DskipTests=true -pl config-server,discovery-server,gateway,laboratoire,utilisateur
+          mvn -f config-server clean package -DskipTests=true
+          mvn -f discovery-server clean package -DskipTests=true
+          mvn -f gateway clean package -DskipTests=true
+          mvn -f laboratoire clean package -DskipTests=true
+          mvn -f utilisateur clean package -DskipTests=true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -82,9 +86,6 @@ jobs:
     needs: [build]
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:

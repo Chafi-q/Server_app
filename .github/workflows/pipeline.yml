@@ -88,6 +88,9 @@ jobs:
           DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -103,11 +106,11 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           echo "Building and pushing images"
-          docker build -t $DOCKER_REPO/config-server:latest -f config-server/Dockerfile config-server
-          docker build -t $DOCKER_REPO/discovery-server:latest -f discovery-server/Dockerfile ./discovery-server
-          docker build -t $DOCKER_REPO/gateway:latest -f gateway/Dockerfile ./gateway
-          docker build -t $DOCKER_REPO/laboratoire:latest -f laboratoire/Dockerfile ./laboratoire
-          docker build -t $DOCKER_REPO/utilisateur:latest -f utilisateur/Dockerfile ./utilisateur
+          docker build -t $DOCKER_REPO/config-server:latest -f ./config-server/Dockerfile ./config-server
+          docker build -t $DOCKER_REPO/discovery-server:latest -f ./discovery-server/Dockerfile ./discovery-server
+          docker build -t $DOCKER_REPO/gateway:latest -f ./gateway/Dockerfile ./gateway
+          docker build -t $DOCKER_REPO/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
+          docker build -t $DOCKER_REPO/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
 
       - name: Push Docker Images
         run: |

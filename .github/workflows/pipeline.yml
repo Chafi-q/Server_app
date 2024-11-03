@@ -65,11 +65,16 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           services=(config-server discovery-server gateway utilisateur)
+          timestamp=$(date '+%Y%m%d%H%M%S')
+          
           for service in "${services[@]}"; do
             echo "Building and pushing image for $service"
-            ls -R ./$service # Optional debugging
-            docker build -t myorg/$service:latest -f ./$service/Dockerfile ./$service
-            docker push myorg/$service:$(date '+%Y-%m-%d-%H-%M-%S')
+            # Build the image
+            docker build -t myorg/$service:latest -t myorg/$service:$timestamp -f ./$service/Dockerfile ./$service
+            
+            # Push both tags
+            docker push myorg/$service:latest
+            docker push myorg/$service:$timestamp
           done
 
       - name: Deploy with Docker Compose

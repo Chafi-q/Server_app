@@ -11,6 +11,7 @@
         <module name="discovery-server" />
         <module name="utilisateur" />
         <module name="gateway" />
+        <module name="laboratoire" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -22,6 +23,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="laboratoire" options="-parameters" />
       <module name="utilisateur" options="-parameters" />
     </option>
   </component>

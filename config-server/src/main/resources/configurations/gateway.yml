@@ -15,7 +15,7 @@ spring:
           enabled: true
       routes:
         - id: utilisateurs
-          uri: http://localhost:8090
+          uri: http://localhost:8090 # we can change localhost:8090 with utilisateurs the service name
           predicates:
             - Path=/api/v1/utilisateurs/**
 # here to add routes of other microserv

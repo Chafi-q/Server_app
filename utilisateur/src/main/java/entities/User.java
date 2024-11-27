@@ -23,7 +23,11 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-
+    private String profession;
+    private String numTel;
+    private String signature;
+    private Integer idLabo;
+    
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -94,5 +98,6 @@ public class User {
 		this.roles = roles;
 	}
     
+	
     
 }

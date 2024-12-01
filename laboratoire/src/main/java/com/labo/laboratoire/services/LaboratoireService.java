@@ -1,9 +1,9 @@
-package services;
+package com.labo.laboratoire.services;
 
 
 
-import entities.Laboratoire;
-import Repositories.LaboratoireRepository;
+import com.labo.laboratoire.entities.Laboratoire;
+import com.labo.laboratoire.Repositories.LaboratoireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

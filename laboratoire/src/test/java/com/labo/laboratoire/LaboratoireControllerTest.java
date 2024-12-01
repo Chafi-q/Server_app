@@ -1,7 +1,8 @@
 package com.labo.laboratoire;
 
-import entities.Laboratoire;
-import services.LaboratoireService;
+import com.labo.laboratoire.controllers.LaboratoireController;
+import com.labo.laboratoire.entities.Laboratoire;
+import com.labo.laboratoire.services.LaboratoireService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import controllers.LaboratoireController;
 
 import java.time.LocalDate;
 import java.util.Collections;

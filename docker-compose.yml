@@ -1,103 +1,116 @@
-version: '3.8'
-
 services:
-  postgres:
+  # PostgreSQL Database for Utilisateur Service
+  utilisateurs-db:
     image: postgres:latest
+    container_name: utilisateurs-db
     environment:
-      POSTGRES_DB: utilisateurs
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: utilisateurs
+      PGDATA: /data/users
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
+    networks:
+      - app-network
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./users_data:/data/users
 
-#  pgadmin:
-#    image: dpage/pgadmin4:latest
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-#      PGADMIN_DEFAULT_PASSWORD: admin
-#    ports:
-#      - "5050:80"
-#    depends_on:
-#      - postgres
-  config-server:
-    build: ./config-server
+  # PostgreSQL Database for Laboratoire Service
+  laboratoires-db:
+    image: postgres:latest
+    container_name: laboratoires-db
     environment:
-      SPRING_PROFILES_ACTIVE: native
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: laboratories
+      PGDATA: /data/labos
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: 5433
+    ports:
+      - "5433:5433"
+    networks:
+      - app-network
+    volumes:
+      - ./labos_data:/data/labos
+
+
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    container_name: config-server
     ports:
       - "8888:8888"
     volumes:
-      - ./config/config-server.yml:/config/config-server.yml
-    command: ["java", "-jar", "/app/config-server.jar", "--spring.config.location=classpath:/config/config-server.yml"]
+      - ./config-server/src/main/resources/configurations:/configurations
+    networks:
+      - app-network
 
   discovery-server:
-    build: ./discovery-server
-    environment:
-      EUREKA_INSTANCE_HOSTNAME: discovery-server
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'false'
-      EUREKA_CLIENT_FETCH_REGISTRY: 'false'
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
+    build:
+      context: ./discovery-server
+      dockerfile: Dockerfile
+    container_name: discovery-server
     ports:
       - "8761:8761"
     depends_on:
       - config-server
-    volumes:
-      - ./config/discovery-server.yml:/config/discovery-server.yml
-    command: ["java", "-jar", "/app/discovery-server.jar", "--spring.config.location=classpath:/config/discovery-server.yml"]
+    networks:
+      - app-network
 
   gateway:
-    build: ./gateway
-    environment:
-      SPRING_APPLICATION_NAME: gateway
-      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: 'true'
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
     ports:
-      - "8222:8222"
+      - "8080:8080"
     depends_on:
       - discovery-server
       - utilisateurs
-    volumes:
-      - ./config/gateway.yml:/config/gateway.yml
-    command: ["java", "-jar", "/app/gateway.jar", "--spring.config.location=classpath:/config/gateway.yml"]
+      - laboratoires
+    networks:
+      - app-network
 
   utilisateurs:
-    build: ./utilisateur
-    environment:
-      SPRING_APPLICATION_NAME: utilisateur
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/utilisateurs
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+    build:
+      context: ./utilisateur
+      dockerfile: Dockerfile
+    container_name: utilisateurs
     ports:
       - "8070:8070"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://utilisateurs-db:5432/utilisateurs
     depends_on:
-      - postgres
+      - utilisateurs-db
       - discovery-server
       - config-server
-    volumes:
-      - ./config/utilisateurs.yml:/config/utilisateurs.yml
-    command: ["java", "-jar", "/app/utilisateur.jar", "--spring.config.location=classpath:/config/utilisateurs.yml"]
+    networks:
+      - app-network
 
   laboratoires:
-    build: ./laboratoire
-    environment:
-      SPRING_APPLICATION_NAME: laboratoire
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-server:8761/eureka
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/laboratoires
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+    build:
+      context: ./laboratoire
+      dockerfile: Dockerfile
+    container_name: laboratoires
     ports:
       - "8090:8090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://laboratoires-db:5433/laboratories
     depends_on:
-      - postgres
+      - laboratoires-db
       - discovery-server
       - config-server
-    volumes:
-      - ./config/laboratoires.yml:/config/laboratoires.yml
-    command: ["java", "-jar", "/app/laboratoire.jar", "--spring.config.location=classpath:/config/laboratoires.yml"]
+    networks:
+      - app-network
 
-
+# Define the network
+networks:
+  app-network:
+    driver: bridge
+# Define the volumes
 volumes:
-  postgres_data:
-    driver: local
+  users_data:
+  labos_data:
+

@@ -26,7 +26,7 @@ services:
       POSTGRES_DB: laboratories
       PGDATA: /data/labos
       POSTGRES_HOST_AUTH_METHOD: trust
-      PGPORT: 5433
+      PGPORT: "5433"
     ports:
       - "5433:5433"
     networks:
@@ -35,17 +35,6 @@ services:
       - ./labos_data:/data/labos
 
 
-  config-server:
-    build:
-      context: ./config-server
-      dockerfile: Dockerfile
-    container_name: config-server
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./config-server/src/main/resources/configurations:/configurations
-    networks:
-      - app-network
 
   discovery-server:
     build:
@@ -54,8 +43,6 @@ services:
     container_name: discovery-server
     ports:
       - "8761:8761"
-    depends_on:
-      - config-server
     networks:
       - app-network
 
@@ -66,10 +53,6 @@ services:
     container_name: gateway
     ports:
       - "8080:8080"
-    depends_on:
-      - discovery-server
-      - utilisateurs
-      - laboratoires
     networks:
       - app-network
 
@@ -80,12 +63,9 @@ services:
     container_name: utilisateurs
     ports:
       - "8070:8070"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://utilisateurs-db:5432/utilisateurs
     depends_on:
       - utilisateurs-db
       - discovery-server
-      - config-server
     networks:
       - app-network
 
@@ -96,12 +76,9 @@ services:
     container_name: laboratoires
     ports:
       - "8090:8090"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://laboratoires-db:5433/laboratories
     depends_on:
       - laboratoires-db
       - discovery-server
-      - config-server
     networks:
       - app-network
 

@@ -8,6 +8,6 @@ RUN mvn clean package -DskipTests
 # Run stage
 FROM openjdk:21-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/*.jar utilisateur.jar
+    COPY --from=build /app/target/*.jar utilisateur.jar
 EXPOSE 8070
 ENTRYPOINT ["java", "-jar", "utilisateur.jar"]

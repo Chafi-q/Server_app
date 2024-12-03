@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="config-server" />
         <module name="Laboratoire" />
         <module name="discovery-server" />
         <module name="utilisateur" />
@@ -16,6 +15,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="config-server" target="21" />
       <module name="Laboratoire" target="21" />
       <module name="laboratoire2" target="17" />
     </bytecodeTargetLevel>

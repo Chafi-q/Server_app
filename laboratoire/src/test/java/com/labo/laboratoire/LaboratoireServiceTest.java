@@ -1,9 +1,9 @@
 package com.labo.laboratoire;
 
 
-import entities.Laboratoire;
-import services.LaboratoireService;
-import Repositories.LaboratoireRepository;
+import com.labo.laboratoire.Repositories.LaboratoireRepository;
+import com.labo.laboratoire.entities.Laboratoire;
+import com.labo.laboratoire.services.LaboratoireService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

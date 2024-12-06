@@ -18,7 +18,7 @@ public class UtilisateurController {
 
     @PostMapping
     @ResponseStatus
-    public ResponseEntity<Utilisateur> createUtilisateur(@Valid @RequestBody UtilisateurDTO utilisateurDTO) {
+    public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO utilisateurDTO) {
         return ResponseEntity.ok(utilisateurService.createUtilisateur(utilisateurDTO));
     }
 
@@ -32,7 +32,7 @@ public class UtilisateurController {
     public ResponseEntity<Utilisateur> getUtilisateurById(@PathVariable Integer id) {
         return ResponseEntity.ok(utilisateurService.getUtilisateurById(id));
     }
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Utilisateur> updateUtilisateur(@PathVariable Integer id,
                                                          @Valid @RequestBody UtilisateurDTO utilisateurDTO) {
         return ResponseEntity.ok(utilisateurService.updateUtilisateur(id, utilisateurDTO));
@@ -43,4 +43,5 @@ public class UtilisateurController {
         utilisateurService.deleteUtilisateur(id);
         return ResponseEntity.noContent().build();
     }
+
 }

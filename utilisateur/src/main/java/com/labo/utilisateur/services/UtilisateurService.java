@@ -11,4 +11,6 @@ public interface UtilisateurService {
     List<Utilisateur> getAllUtilisateurs();
     Utilisateur updateUtilisateur(Integer id, UtilisateurDTO utilisateurDTO);
     void deleteUtilisateur(Integer id);
+
+    List<Utilisateur> getUsersByLab(Long labId);
 }

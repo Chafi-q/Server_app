@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+### Data ###
+labos_data/*
+users_data/*

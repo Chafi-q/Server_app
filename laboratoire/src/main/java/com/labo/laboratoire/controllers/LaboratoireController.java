@@ -1,7 +1,7 @@
-package controllers;
+package com.labo.laboratoire.controllers;
 
-import entities.Laboratoire;
-import services.LaboratoireService;
+import com.labo.laboratoire.entities.Laboratoire;
+import com.labo.laboratoire.services.LaboratoireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/laboratoires")
+@RequestMapping("/api/v1/laboratoires")
 public class LaboratoireController {
 
     @Autowired

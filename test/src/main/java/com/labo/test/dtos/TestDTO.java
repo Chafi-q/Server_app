@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TestAnalyseDTO {
+public class TestDTO {
     private Long id;
     private Long fkIdAnalyse;
     private String nomTest;

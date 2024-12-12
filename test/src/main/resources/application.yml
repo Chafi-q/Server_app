@@ -1,5 +1,5 @@
 server:
-  port: 8074
+  port: 8075
 eureka:
   client:
     service-url:
@@ -8,9 +8,9 @@ eureka:
 
 spring:
   application:
-    name: examins
+    name: tests
   datasource:
-    url: jdbc:postgresql://examins-db:5432/examins
+    url: jdbc:postgresql://tests-db:5432/tests
     username: postgres
     password: postgres
 
@@ -21,7 +21,7 @@ spring:
 
 application:
   config:
-    examins-url: http://gateway:8080/api/v1/examins
+    tests-url: http://gateway:8080/api/v1/tests
 
 management:
   tracing:

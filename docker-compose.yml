@@ -14,8 +14,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./users_data:/data/users
-
+      - ./data/users_data:/data/users
   # PostgreSQL Database for Laboratoire Service
   laboratoires-db:
     image: postgres:latest
@@ -32,9 +31,8 @@ services:
     networks:
       - app-network
     volumes:
-      - ./labos_data:/data/labos
-
-  # PostgreSQL Database for Laboratoire Service
+      - ./data/labos_data:/data/labos
+  # PostgreSQL Database for Patient Service
   patients-db:
     image: postgres:latest
     container_name: patients-db
@@ -42,7 +40,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: patients
-      PGDATA: /data/patient
+      PGDATA: /data/patients
       POSTGRES_HOST_AUTH_METHOD: trust
       PGPORT: "5434"
     ports:
@@ -50,7 +48,58 @@ services:
     networks:
       - app-network
     volumes:
-      - ./patient_data:/data/patient
+      - ./data/patients_data:/data/patients
+  # PostgreSQL Database for Analyse Service
+  analyses-db:
+    image: postgres:latest
+    container_name: analyses-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: analyses
+      PGDATA: /data/analyses
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: "5435"
+    ports:
+      - "5435:5435"
+    networks:
+      - app-network
+    volumes:
+      - ./data/analyses_data:/data/analyses
+  # PostgreSQL Database for Examin Service
+  examins-db:
+    image: postgres:latest
+    container_name: examins-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: examins
+      PGDATA: /data/examins
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: "5436"
+    ports:
+      - "5436:5436"
+    networks:
+      - app-network
+    volumes:
+      - ./data/examins_data:/data/examins
+  # PostgreSQL Database for Test Service
+  tests-db:
+    image: postgres:latest
+    container_name: tests-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tests
+      PGDATA: /data/tests
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: "5437"
+    ports:
+      - "5437:5437"
+    networks:
+      - app-network
+    volumes:
+      - ./data/tests_data:/data/tests
 
 
   discovery-server:
@@ -92,7 +141,7 @@ services:
       dockerfile: Dockerfile
     container_name: laboratoires
     ports:
-      - "8090:8090"
+      - "8071:8071"
     depends_on:
       - laboratoires-db
       - discovery-server
@@ -105,9 +154,51 @@ services:
       dockerfile: Dockerfile
     container_name: patients
     ports:
-      - "8090:8090"
+      - "8072:8072"
     depends_on:
       - patients-db
+      - discovery-server
+    networks:
+      - app-network
+
+  analyses:
+    build:
+      context: ./analyse
+      dockerfile: Dockerfile
+    container_name: analyses
+    ports:
+      - "8073:8073"
+    depends_on:
+      - analyses-db
+      - discovery-server
+    networks:
+      - app-network
+
+
+
+
+  examins:
+    build:
+      context: ./examin
+      dockerfile: Dockerfile
+    container_name: examins
+    ports:
+      - "8074:8074"
+    depends_on:
+      - examins-db
+      - discovery-server
+    networks:
+      - app-network
+
+  tests:
+    build:
+      context: ./test
+      dockerfile: Dockerfile
+    container_name: tests
+    ports:
+      - "8075:8075"
+    depends_on:
+      - tests-db
       - discovery-server
     networks:
       - app-network
@@ -120,4 +211,8 @@ volumes:
   users_data:
   labos_data:
   patient_data:
+  analyse_data:
+  examins_data:
+  tests_data:
+
 

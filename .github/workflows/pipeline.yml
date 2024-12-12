@@ -30,24 +30,24 @@ jobs:
           mvn -f laboratoire clean compile
           mvn -f utilisateur clean compile
 
-    unit-test:
-      name: Unit Tests
-      runs-on: ubuntu-latest
-
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-
-        - name: Set up JDK
-          uses: actions/setup-java@v4
-          with:
-            distribution: 'temurin'
-            java-version: 21
-
-    # -pl flag stands for "project list"
-        - name: Running Unit Tests
-          run: |
-            ./mvnw -f utilisateur clean test 
+#  unit-test:
+#    name: Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: 21
+#
+#  # -pl flag stands for "project list"
+#      - name: Running Unit Tests
+#        run: |
+#          ./mvnw -f utilisateur clean test
 
   build:
     name: Build

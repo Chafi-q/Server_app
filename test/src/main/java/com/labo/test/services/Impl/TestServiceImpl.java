@@ -1,9 +1,9 @@
 package com.labo.test.services.Impl;
 
-import com.labo.test.dtos.TestAnalyseDTO;
-import com.labo.test.entities.TestAnalyse;
-import com.labo.test.repositories.TestAnalyseRepository;
-import com.labo.test.services.TestAnalyseService;
+import com.labo.test.dtos.TestDTO;
+import com.labo.test.entities.Test;
+import com.labo.test.repositories.TestRepository;
+import com.labo.test.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,24 +11,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TestAnalyseServiceImpl implements TestAnalyseService {
+public class TestServiceImpl implements TestService {
 
     @Autowired
-    private TestAnalyseRepository repository;
+    private TestRepository repository;
 
-    public TestAnalyseDTO saveTestAnalyse(TestAnalyseDTO dto) {
-        TestAnalyse entity = mapToEntity(dto);
-        TestAnalyse savedEntity = repository.save(entity);
+    public TestDTO saveTestAnalyse(TestDTO dto) {
+        Test entity = mapToEntity(dto);
+        Test savedEntity = repository.save(entity);
         return mapToDTO(savedEntity);
     }
 
-    public List<TestAnalyseDTO> getAllTestAnalyses() {
+    public List<TestDTO> getAllTestAnalyses() {
         return repository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    public TestAnalyseDTO getTestAnalyseById(Long id) {
+    public TestDTO getTestAnalyseById(Long id) {
         return repository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("TestAnalyse not found"));
@@ -38,8 +38,8 @@ public class TestAnalyseServiceImpl implements TestAnalyseService {
         repository.deleteById(id);
     }
 
-    private TestAnalyse mapToEntity(TestAnalyseDTO dto) {
-        TestAnalyse entity = new TestAnalyse();
+    private Test mapToEntity(TestDTO dto) {
+        Test entity = new Test();
         entity.setId(dto.getId());
         entity.setFkIdAnalyse(dto.getFkIdAnalyse());
         entity.setNomTest(dto.getNomTest());
@@ -51,8 +51,8 @@ public class TestAnalyseServiceImpl implements TestAnalyseService {
         return entity;
     }
 
-    private TestAnalyseDTO mapToDTO(TestAnalyse entity) {
-        TestAnalyseDTO dto = new TestAnalyseDTO();
+    private TestDTO mapToDTO(Test entity) {
+        TestDTO dto = new TestDTO();
         dto.setId(entity.getId());
         dto.setFkIdAnalyse(entity.getFkIdAnalyse());
         dto.setNomTest(entity.getNomTest());

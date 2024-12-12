@@ -1,31 +1,31 @@
 package com.labo.laboratoire.controllers;
 
-import com.labo.laboratoire.dtos.ContactLaboratoireDTO;
-import com.labo.laboratoire.services.ContactLaboratoireService;
+import com.labo.laboratoire.dtos.ContactDTO;
+import com.labo.laboratoire.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/contactLaboratoire")
-public class ContactLaboratoireController {
+@RequestMapping("/api/v1/contacts")
+public class ContactController {
 
     @Autowired
-    private ContactLaboratoireService service;
+    private ContactService service;
 
     @PostMapping
-    public ContactLaboratoireDTO createContact(@RequestBody ContactLaboratoireDTO dto) {
+    public ContactDTO createContact(@RequestBody ContactDTO dto) {
         return service.saveContact(dto);
     }
 
     @GetMapping
-    public List<ContactLaboratoireDTO> getAllContacts() {
+    public List<ContactDTO> getAllContacts() {
         return service.getAllContacts();
     }
 
     @GetMapping("/{id}")
-    public ContactLaboratoireDTO getContactById(@PathVariable Long id) {
+    public ContactDTO getContactById(@PathVariable Long id) {
         return service.getContactById(id);
     }
 

@@ -1,10 +1,9 @@
 package com.labo.test;
 
-import com.labo.test.dtos.TestAnalyseDTO;
-import com.labo.test.entities.TestAnalyse;
-import com.labo.test.repositories.TestAnalyseRepository;
-import com.labo.test.services.TestAnalyseService;
-import org.junit.jupiter.api.Test;
+import com.labo.test.dtos.TestDTO;
+import com.labo.test.entities.Test;
+import com.labo.test.repositories.TestRepository;
+import com.labo.test.services.TestService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,18 +17,18 @@ import static org.mockito.Mockito.*;
 public class TestAnalyseServiceTest {
 
     @InjectMocks
-    private TestAnalyseService service;
+    private TestService service;
 
     @Mock
-    private TestAnalyseRepository repository;
+    private TestRepository repository;
 
     public TestAnalyseServiceTest() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveTestAnalyse() {
-        TestAnalyseDTO dto = new TestAnalyseDTO();
+        TestDTO dto = new TestDTO();
         dto.setFkIdAnalyse(1L);
         dto.setNomTest("Test 1");
         dto.setSousEpreuve("SousEpreuve 1");
@@ -38,7 +37,7 @@ public class TestAnalyseServiceTest {
         dto.setUniteDeReference("mg/dL");
         dto.setDetails("Details 1");
 
-        TestAnalyse entity = new TestAnalyse();
+        Test entity = new Test();
         entity.setFkIdAnalyse(1L);
         entity.setNomTest("Test 1");
         entity.setSousEpreuve("SousEpreuve 1");
@@ -47,17 +46,17 @@ public class TestAnalyseServiceTest {
         entity.setUniteDeReference("mg/dL");
         entity.setDetails("Details 1");
 
-        when(repository.save(any(TestAnalyse.class))).thenReturn(entity);
+        when(repository.save(any(Test.class))).thenReturn(entity);
 
-        TestAnalyseDTO result = service.saveTestAnalyse(dto);
+        TestDTO result = service.saveTestAnalyse(dto);
 
         assertEquals(dto.getNomTest(), result.getNomTest());
-        verify(repository, times(1)).save(any(TestAnalyse.class));
+        verify(repository, times(1)).save(any(Test.class));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testGetTestAnalyseById() {
-        TestAnalyse entity = new TestAnalyse();
+        Test entity = new Test();
         entity.setId(1L);
         entity.setFkIdAnalyse(1L);
         entity.setNomTest("Test 1");
@@ -69,7 +68,7 @@ public class TestAnalyseServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        TestAnalyseDTO result = service.getTestAnalyseById(1L);
+        TestDTO result = service.getTestAnalyseById(1L);
 
         assertEquals(entity.getNomTest(), result.getNomTest());
         verify(repository, times(1)).findById(1L);

@@ -23,8 +23,12 @@ jobs:
         run: |
           mvn -f discovery-server clean compile
           mvn -f gateway clean compile
-          mvn -f laboratoire clean compile
           mvn -f utilisateur clean compile
+          mvn -f laboratoire clean compile
+          mvn -f patient clean compile
+          mvn -f analyse clean compile
+          mvn -f examin clean compile
+          mvn -f test clean compile
 
   unit-test:
     name: Unit Tests
@@ -45,6 +49,10 @@ jobs:
         run: |
           mvn -f utilisateur clean test
           mvn -f laboratoire clean test
+          mvn -f patient clean test
+          mvn -f analyse clean test
+          mvn -f examin clean test
+          mvn -f test clean test
 
   build:
     name: Build
@@ -67,6 +75,10 @@ jobs:
           mvn -f gateway clean package -DskipTests=true
           mvn -f laboratoire clean package -DskipTests=true
           mvn -f utilisateur clean package -DskipTests=true
+          mvn -f patient clean package -DskipTests=true
+          mvn -f analyse clean package -DskipTests=true
+          mvn -f examin clean package -DskipTests=true
+          mvn -f test clean package -DskipTests=true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -107,5 +119,22 @@ jobs:
           docker build -t $DOCKER_USERNAME/gateway:latest -f ./gateway/Dockerfile ./gateway
           docker build -t $DOCKER_USERNAME/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
           docker build -t $DOCKER_USERNAME/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
+          
+          docker build -t $DOCKER_USERNAME/patient:latest -f ./patient/Dockerfile ./patient
+          docker build -t $DOCKER_USERNAME/analyse:latest -f ./analyse/Dockerfile ./analyse
+          docker build -t $DOCKER_USERNAME/examin:latest -f ./examin/Dockerfile ./examin
+          docker build -t $DOCKER_USERNAME/test:latest -f ./test/Dockerfile ./test
 
+      - name: Push Docker Images
+        run: |
+          docker push $DOCKER_USERNAME/config-server:latest
+          docker push $DOCKER_USERNAME/discovery-server:latest
+          docker push $DOCKER_USERNAME/gateway:latest
+          docker push $DOCKER_USERNAME/utilisateur:latest
+          docker push $DOCKER_USERNAME/laboratoire:latest
+          docker push $DOCKER_USERNAME/patient:latest
+          docker push $DOCKER_USERNAME/analyse:latest
+          docker push $DOCKER_USERNAME/examin:latest
+          docker push $DOCKER_USERNAME/test:latest
+          
           

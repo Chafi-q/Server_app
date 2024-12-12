@@ -63,7 +63,6 @@ jobs:
 
       - name: Build Project
         run: |
-          mvn -f config-server clean package -DskipTests=true
           mvn -f discovery-server clean package -DskipTests=true
           mvn -f gateway clean package -DskipTests=true
           mvn -f laboratoire clean package -DskipTests=true

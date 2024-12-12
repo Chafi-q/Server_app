@@ -13,6 +13,18 @@
         <module name="gateway" />
         <module name="laboratoire" />
       </profile>
+      <profile name="Annotation profile for test" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="analyse" />
+        <module name="test" />
+        <module name="patient" />
+        <module name="examin" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="config-server" target="21" />
@@ -23,11 +35,15 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Laboratoire" options="-parameters" />
+      <module name="analyse" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
+      <module name="examin" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="laboratoire" options="-parameters" />
       <module name="laboratoire2" options="-parameters" />
+      <module name="patient" options="-parameters" />
+      <module name="test" options="-parameters" />
       <module name="utilisateur" options="-parameters" />
     </option>
   </component>

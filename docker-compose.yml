@@ -34,6 +34,23 @@ services:
     volumes:
       - ./labos_data:/data/labos
 
+  # PostgreSQL Database for Laboratoire Service
+  patients-db:
+    image: postgres:latest
+    container_name: patients-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: patients
+      PGDATA: /data/patient
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGPORT: "5434"
+    ports:
+      - "5434:5434"
+    networks:
+      - app-network
+    volumes:
+      - ./patient_data:/data/patient
 
 
   discovery-server:
@@ -82,6 +99,18 @@ services:
     networks:
       - app-network
 
+  patients:
+    build:
+      context: ./patient
+      dockerfile: Dockerfile
+    container_name: patients
+    ports:
+      - "8090:8090"
+    depends_on:
+      - patients-db
+      - discovery-server
+    networks:
+      - app-network
 # Define the network
 networks:
   app-network:
@@ -90,4 +119,5 @@ networks:
 volumes:
   users_data:
   labos_data:
+  patient_data:
 

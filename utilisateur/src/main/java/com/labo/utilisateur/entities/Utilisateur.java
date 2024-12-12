@@ -22,7 +22,4 @@ public class Utilisateur {
     private String role;
     private Integer idLabo;
 
-//    @ManyToOne
-//    @JoinColumn(name = "idLaboratoire")
-//    private Laboratoire laboratoire;
 }

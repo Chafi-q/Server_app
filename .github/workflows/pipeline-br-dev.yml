@@ -43,8 +43,8 @@ jobs:
   # -pl flag stands for "project list"
       - name: Running Unit Tests
         run: |
-          ./mvnw -f utilisateur clean test
-          ./mvnw -f laboratoire clean test
+          mvn -f utilisateur clean test
+          mvn -f laboratoire clean test
 
   build:
     name: Build

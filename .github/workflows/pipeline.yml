@@ -9,53 +9,115 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  compile:
+    name: Compile
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Compile Project
+        run: |
+          mvn -f config-server clean compile
+          mvn -f discovery-server clean compile
+          mvn -f gateway clean compile
+          mvn -f laboratoire clean compile
+          mvn -f utilisateur clean compile
+
+#  unit-test:
+#    name: Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: 21
+#
+#  # -pl flag stands for "project list"
+#      - name: Running Unit Tests
+#        run: |
+#          ./mvnw -f utilisateur clean test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [compile]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Build and Test All Services
+      - name: Build Project
         run: |
-          for service in utilisateur config-server discovery-server gateway; do
-            mvn -f $service/pom.xml clean install -DskipTests=true
-          done
+          mvn -f config-server clean package -DskipTests=true
+          mvn -f discovery-server clean package -DskipTests=true
+          mvn -f gateway clean package -DskipTests=true
+          mvn -f laboratoire clean package -DskipTests=true
+          mvn -f utilisateur clean package -DskipTests=true
 
-  deploy:
-    name: Deploy
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            */target/*.jar
+          retention-days: 1
+
+  build-image:
+    name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
+    needs: [build]
+    env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
 
       - name: Log in to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
       - name: Build and Push Docker Images
         run: |
-          services=(config-server discovery-server gateway utilisateurs)
-          for service in "${services[@]}"; do
-            docker build -t myorg/$service:latest -f ./$service/Dockerfile ./$service
-            docker push myorg/$service:$(date '+%Y-%m-%d-%H-%M-%S')
-          done
+          echo "Building and pushing images"
+          docker build -t $DOCKER_USERNAME/config-server:latest -f ./config-server/Dockerfile ./config-server
+          docker build -t $DOCKER_USERNAME/discovery-server:latest -f ./discovery-server/Dockerfile ./discovery-server
+          docker build -t $DOCKER_USERNAME/gateway:latest -f ./gateway/Dockerfile ./gateway
+          docker build -t $DOCKER_USERNAME/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
+          docker build -t $DOCKER_USERNAME/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
 
-      - name: Deploy with Docker Compose
+      - name: Push Docker Images
         run: |
-          docker-compose -f docker-compose.yml up -d
+          docker push $DOCKER_USERNAME/config-server:latest
+          docker push $DOCKER_USERNAME/discovery-server:latest
+          docker push $DOCKER_USERNAME/gateway:latest
+          docker push $DOCKER_USERNAME/laboratoire:latest
+          docker push $DOCKER_USERNAME/utilisateur:latest
+          

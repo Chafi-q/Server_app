@@ -1,4 +1,4 @@
-package controller;
+package controllers;
 
 import lombok.AllArgsConstructor;
 import services.AuthService;

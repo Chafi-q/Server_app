@@ -1,4 +1,4 @@
-package controller;
+package controllers;
 
 import dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;

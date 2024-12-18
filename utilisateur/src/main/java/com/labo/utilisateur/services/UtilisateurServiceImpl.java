@@ -31,11 +31,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
     }
-    @Override
-    public List<Utilisateur> getUsersByLab(Long labId) {
-        return utilisateurRepository.findByIdLabo(labId);
-    }
-
 
 
     @Override

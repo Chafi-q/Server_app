@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @ImportAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 class UtilisateurApplicationTests {
-
     @Test
     void contextLoads() {
     }

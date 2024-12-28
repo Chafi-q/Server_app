@@ -1,8 +1,6 @@
 package com.labo.patient.services;
 
 import com.labo.patient.dtos.DossierDTO;
-import com.labo.patient.entities.Dossier;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

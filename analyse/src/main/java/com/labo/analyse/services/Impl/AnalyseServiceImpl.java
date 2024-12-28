@@ -5,6 +5,7 @@ import com.labo.analyse.dtos.AnalyseDTO;
 import com.labo.analyse.entities.Analyse;
 import com.labo.analyse.repositories.AnalyseRepository;
 import com.labo.analyse.services.AnalyseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AnalyseServiceImpl implements AnalyseService {
 
     @Autowired

@@ -23,4 +23,93 @@ public class PatientDTO {
     private String numTel;
     private String email;
     private Boolean visiblePour;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNomComplet() {
+        return nomComplet;
+    }
+
+    public void setNomComplet(String nomComplet) {
+        this.nomComplet = nomComplet;
+    }
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getLieuNaissance() {
+        return lieuNaissance;
+    }
+
+    public void setLieuNaissance(String lieuNaissance) {
+        this.lieuNaissance = lieuNaissance;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
+    public String getTypePieceIdentite() {
+        return typePieceIdentite;
+    }
+
+    public void setTypePieceIdentite(String typePieceIdentite) {
+        this.typePieceIdentite = typePieceIdentite;
+    }
+
+    public String getNumPieceIdentite() {
+        return numPieceIdentite;
+    }
+
+    public void setNumPieceIdentite(String numPieceIdentite) {
+        this.numPieceIdentite = numPieceIdentite;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getNumTel() {
+        return numTel;
+    }
+
+    public void setNumTel(String numTel) {
+        this.numTel = numTel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getVisiblePour() {
+        return visiblePour;
+    }
+
+    public void setVisiblePour(Boolean visiblePour) {
+        this.visiblePour = visiblePour;
+    }
+
 }

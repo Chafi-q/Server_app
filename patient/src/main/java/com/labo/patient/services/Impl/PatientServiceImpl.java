@@ -4,7 +4,7 @@ import com.labo.patient.dtos.PatientDTO;
 import com.labo.patient.entities.Patient;
 import com.labo.patient.repositories.PatientRepository;
 import com.labo.patient.services.PatientService;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,32 +12,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
-    private final PatientRepository patientRepository;
-    private final ModelMapper modelMapper;
-
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper) {
-        this.patientRepository = patientRepository;
-        this.modelMapper = modelMapper;
-    }
+    @Autowired
+    private PatientRepository patientRepository;
 
     @Override
     public PatientDTO createPatient(PatientDTO patientDTO) {
-        Patient patient = modelMapper.map(patientDTO, Patient.class);
-        return modelMapper.map(patientRepository.save(patient), PatientDTO.class);
+        Patient patient = mapToEntity(patientDTO);
+        Patient savedPatient = patientRepository.save(patient);
+        return mapToDTO(savedPatient);
     }
 
     @Override
     public PatientDTO getPatientById(Long id) {
-        Patient patient = patientRepository.findById(id)
+        return patientRepository.findById(id)
+                .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
-        return modelMapper.map(patient, PatientDTO.class);
     }
 
     @Override
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll()
                 .stream()
-                .map(patient -> modelMapper.map(patient, PatientDTO.class))
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -46,8 +42,19 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        modelMapper.map(patientDTO, patient);
-        return modelMapper.map(patientRepository.save(patient), PatientDTO.class);
+        patient.setNomComplet(patientDTO.getNomComplet());
+        patient.setDateNaissance(patientDTO.getDateNaissance());
+        patient.setLieuNaissance(patientDTO.getLieuNaissance());
+        patient.setSexe(patientDTO.getSexe());
+        patient.setTypePieceIdentite(patientDTO.getTypePieceIdentite());
+        patient.setNumPieceIdentite(patientDTO.getNumPieceIdentite());
+        patient.setAdresse(patientDTO.getAdresse());
+        patient.setNumTel(patientDTO.getNumTel());
+        patient.setEmail(patientDTO.getEmail());
+        patient.setVisiblePour(patientDTO.getVisiblePour());
+
+        Patient updatedPatient = patientRepository.save(patient);
+        return mapToDTO(updatedPatient);
     }
 
     @Override
@@ -56,5 +63,36 @@ public class PatientServiceImpl implements PatientService {
             throw new RuntimeException("Patient not found");
         }
         patientRepository.deleteById(id);
+    }
+
+    private Patient mapToEntity(PatientDTO dto) {
+        Patient entity = new Patient();
+        entity.setNomComplet(dto.getNomComplet());
+        entity.setDateNaissance(dto.getDateNaissance());
+        entity.setLieuNaissance(dto.getLieuNaissance());
+        entity.setSexe(dto.getSexe());
+        entity.setTypePieceIdentite(dto.getTypePieceIdentite());
+        entity.setNumPieceIdentite(dto.getNumPieceIdentite());
+        entity.setAdresse(dto.getAdresse());
+        entity.setNumTel(dto.getNumTel());
+        entity.setEmail(dto.getEmail());
+        entity.setVisiblePour(dto.getVisiblePour());
+        return entity;
+    }
+
+    private PatientDTO mapToDTO(Patient entity) {
+        PatientDTO dto = new PatientDTO();
+        dto.setId(entity.getId());
+        dto.setNomComplet(entity.getNomComplet());
+        dto.setDateNaissance(entity.getDateNaissance());
+        dto.setLieuNaissance(entity.getLieuNaissance());
+        dto.setSexe(entity.getSexe());
+        dto.setTypePieceIdentite(entity.getTypePieceIdentite());
+        dto.setNumPieceIdentite(entity.getNumPieceIdentite());
+        dto.setAdresse(entity.getAdresse());
+        dto.setNumTel(entity.getNumTel());
+        dto.setEmail(entity.getEmail());
+        dto.setVisiblePour(entity.getVisiblePour());
+        return dto;
     }
 }

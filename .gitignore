@@ -34,3 +34,4 @@ build/
 ### Data ###
 labos_data/*
 users_data/*
+data/*

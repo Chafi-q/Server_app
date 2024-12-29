@@ -59,4 +59,12 @@ public class Examen {
     public void setResultat(String resultat) {
         this.resultat = resultat;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "dossier_id", nullable = false)
+    private Dossier dossier;
+
+    @ManyToOne
+    @JoinColumn(name = "epreuve_id", nullable = false)
+    private Epreuve epreuve;
 }

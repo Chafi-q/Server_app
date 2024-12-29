@@ -24,4 +24,8 @@ public class Contact {
     private String fax;
 
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "laboratoire_id", nullable = false)
+    private Laboratoire laboratoire;
 }

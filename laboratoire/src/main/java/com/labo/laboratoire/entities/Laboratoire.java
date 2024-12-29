@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -30,4 +31,12 @@ public class Laboratoire {
 
 	public Laboratoire(String laboratoireA, String image, String nrc123, boolean b, LocalDate now) {
 	}
+
+    @OneToMany(mappedBy = "laboratoire", cascade = CascadeType.ALL)
+    private List<Contact> contacts;
+
+    @OneToMany(mappedBy = "laboratoire", cascade = CascadeType.ALL)
+    private List<Analyse> analyses;
+
+
 }

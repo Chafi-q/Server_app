@@ -1,11 +1,9 @@
 package com.labo.analyse.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -53,4 +51,11 @@ public class Analyse {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "laboratoire_id", nullable = false)
+    private Laboratoire laboratoire;
+
+    @OneToMany(mappedBy = "analyse", cascade = CascadeType.ALL)
+    private List<Epreuve> epreuves;
 }

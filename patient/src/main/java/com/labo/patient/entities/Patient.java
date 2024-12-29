@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+
 @Data
 @Entity
 @Table(name = "patients")
@@ -125,4 +126,8 @@ public class Patient {
     public void setVisiblePour(Boolean visiblePour) {
         this.visiblePour = visiblePour;
     }
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Dossier> dossiers;
+
 }

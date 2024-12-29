@@ -40,4 +40,12 @@ public class Epreuve {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "analyse_id", nullable = false)
+    private Analyse analyse;
+
+    @OneToMany(mappedBy = "epreuve", cascade = CascadeType.ALL)
+    private List<Examen> examens;
+
 }

@@ -1,10 +1,14 @@
 package com.labo.patient.entities;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
+@OneToMany
+@ManyToOne
+@JoinColumn
 @Data
 @Entity
 @Table(name = "dossier")
@@ -52,4 +56,11 @@ public class Dossier {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
+    @OneToMany(mappedBy = "dossier", cascade = CascadeType.ALL)
+    private List<Examen> examens;
 }

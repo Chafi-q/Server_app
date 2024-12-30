@@ -1,5 +1,7 @@
 package com.labo.utilisateur.services;
 
+import com.labo.utilisateur.FeignClient.LaboratoireClient;
+import com.labo.utilisateur.dtos.LaboratoireDTO;
 import com.labo.utilisateur.dtos.UtilisateurDTO;
 import com.labo.utilisateur.entities.Utilisateur;
 import com.labo.utilisateur.repositories.UtilisateurRepository;
@@ -11,9 +13,20 @@ import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
-    private final UtilisateurRepository utilisateurRepository;
+
+    private UtilisateurRepository utilisateurRepository;
+    private final LaboratoireClient laboratoireClient;
+
+    public UtilisateurServiceImpl(LaboratoireClient laboratoireClient) {
+        this.laboratoireClient = laboratoireClient;
+    }
+
+    public LaboratoireDTO getLaboratoireDetails(Long fkIdLaboratoire) {
+        return laboratoireClient.getLaboratoireById(fkIdLaboratoire);
+    }
+
     @Override
     public Utilisateur createUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = mapToEntity(utilisateurDTO);

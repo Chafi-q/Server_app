@@ -1,6 +1,7 @@
 package com.labo.analyse.controllers;
 
 import com.labo.analyse.dtos.AnalyseDTO;
+import com.labo.analyse.dtos.LaboratoireDTO;
 import com.labo.analyse.services.AnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

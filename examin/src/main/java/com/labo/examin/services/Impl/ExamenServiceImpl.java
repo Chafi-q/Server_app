@@ -1,6 +1,8 @@
 package com.labo.examin.services.Impl;
 
+import com.labo.examin.FeingClient.TestAnalyseClient;
 import com.labo.examin.dtos.ExamenDTO;
+import com.labo.examin.dtos.TestAnalyseDTO;
 import com.labo.examin.entities.Examen;
 import com.labo.examin.repositories.ExamenRepository;
 import com.labo.examin.services.ExamenService;
@@ -15,6 +17,15 @@ public class ExamenServiceImpl implements ExamenService {
 
     @Autowired
     private ExamenRepository repository;
+    @Autowired
+    private TestAnalyseClient testAnalyseClient;
+
+    public ExamenServiceImpl(TestAnalyseClient testAnalyseClient) {
+        this.testAnalyseClient = testAnalyseClient;
+    }
+  //  public TestAnalyseDTO getTestAnalyseDetails(Long fkIdTestAnalyse) {
+   //     return testAnalyseClient.getTestAnalyseById(fkIdTestAnalyse);
+   // }
 
     public ExamenDTO saveExamen(ExamenDTO dto) {
         Examen entity = mapToEntity(dto);

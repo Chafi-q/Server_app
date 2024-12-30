@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-
 public class PatientDTO {
     private Long id;
     private String nomComplet;

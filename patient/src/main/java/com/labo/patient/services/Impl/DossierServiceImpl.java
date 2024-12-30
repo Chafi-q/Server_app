@@ -1,5 +1,6 @@
 package com.labo.patient.services.Impl;
 
+import Patient.src.main.java.com.labo.patient.FeignClient.PatientClient;
 import com.labo.patient.dtos.DossierDTO;
 import com.labo.patient.entities.Dossier;
 import com.labo.patient.repositories.DossierRepository;
@@ -15,6 +16,17 @@ public class DossierServiceImpl implements DossierService {
 
     @Autowired
     private DossierRepository repository;
+
+    private  PatientClient patientClient;
+
+    public DossierServiceImpl(PatientClient patientClient) {
+        this.patientClient = patientClient;
+    }
+
+    public com.labo.patient.dtos.PatientDTO getPatientDetails(Long fkIdPatient) {
+        return patientClient.getPatientById(fkIdPatient);
+    }
+
 
     public DossierDTO saveDossier(DossierDTO dto) {
         Dossier entity = mapToEntity(dto);

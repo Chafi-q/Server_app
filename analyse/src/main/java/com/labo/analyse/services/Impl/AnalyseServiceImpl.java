@@ -1,7 +1,9 @@
 package com.labo.analyse.services.Impl;
 
 
+import com.labo.analyse.FeignClient.LaboratoireClient;
 import com.labo.analyse.dtos.AnalyseDTO;
+import com.labo.analyse.dtos.LaboratoireDTO;
 import com.labo.analyse.entities.Analyse;
 import com.labo.analyse.repositories.AnalyseRepository;
 import com.labo.analyse.services.AnalyseService;
@@ -13,8 +15,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class AnalyseServiceImpl implements AnalyseService {
+
+    private  LaboratoireClient laboratoireClient;
+
+    public AnalyseServiceImpl(LaboratoireClient laboratoireClient) {
+        this.laboratoireClient = laboratoireClient;
+    }
+
+    public LaboratoireDTO getLaboratoireDetails(Long fkIdLaboratoire) {
+        return laboratoireClient.getLaboratoireById(fkIdLaboratoire);
+    }
+
 
     @Autowired
     private AnalyseRepository repository;

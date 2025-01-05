@@ -3,6 +3,7 @@ package com.labo.laboratoire.controllers;
 import com.labo.laboratoire.dtos.AdresseDTO;
 import com.labo.laboratoire.services.AdresseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,21 +16,25 @@ public class AdresseController {
     private AdresseService service;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public AdresseDTO createAdresse(@RequestBody AdresseDTO dto) {
         return service.saveAdresse(dto);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public List<AdresseDTO> getAllAdresses() {
         return service.getAllAdresses();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public AdresseDTO getAdresseById(@PathVariable Long id) {
         return service.getAdresseById(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public void deleteAdresse(@PathVariable Long id) {
         service.deleteAdresse(id);
     }

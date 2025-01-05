@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class DossierController {
     private final DossierService dossierService;
 
     @PostMapping("/patient/{patientId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public ResponseEntity<DossierDTO> createDossierForPatient(
             @PathVariable Long patientId,
             @RequestBody DossierDTO dossierDTO) {
@@ -28,6 +30,7 @@ public class DossierController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public ResponseEntity<List<DossierDTO>> getAllDossiers() {
         List<DossierDTO> dossiers = dossierService.getAllDossiers().stream()
                 .map(dossier -> new DossierDTO(dossier.getNumDossier(), dossier.getDate(), dossier.getPatient().getId()))
@@ -36,6 +39,7 @@ public class DossierController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public ResponseEntity<DossierDTO> getDossierById(@PathVariable Long id) {
         Dossier dossier = dossierService.getDossierById(id);
         DossierDTO responseDTO = new DossierDTO(dossier.getNumDossier(), dossier.getDate(), dossier.getPatient().getId());
@@ -43,6 +47,7 @@ public class DossierController {
     }
 
     @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public ResponseEntity<DossierDTO> getDossierByPatientId(@PathVariable Long patientId) {
         Dossier dossier = dossierService.getDossierByPatientId(patientId);
         DossierDTO responseDTO = new DossierDTO(dossier.getNumDossier(), dossier.getDate(), dossier.getPatient().getId());
@@ -50,6 +55,7 @@ public class DossierController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYE')")
     public ResponseEntity<Void> deleteDossier(@PathVariable Long id) {
         dossierService.deleteDossier(id);
         return ResponseEntity.noContent().build();

@@ -48,9 +48,14 @@ spring:
           uri: lb://tests
           predicates:
             - Path=/api/v1/tests/**
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://localhost:8090/realms/labo-realm"
-          jwk-set-uri: "http://localhost:8090/realms/labo-realm/protocol/openid-connect/certs"
+          issuer-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}
+
+app:
+  keycloak:
+    realm: ${APP_KEYCLOAK_REALM}
+    serverUrl: ${APP_KEYCLOAK_SERVER_URL_DKR}

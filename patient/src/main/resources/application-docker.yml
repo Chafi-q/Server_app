@@ -19,6 +19,17 @@ spring:
       ddl-auto: update
     database: postgresql
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}
+
+app:
+  keycloak:
+    realm: ${APP_KEYCLOAK_REALM}
+    serverUrl: ${APP_KEYCLOAK_SERVER_URL_DKR}
+
 application:
   config:
     patients-url: http://gateway:8080/api/v1/patients

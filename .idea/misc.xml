@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/analyse/pom.xml" />
         <option value="$PROJECT_DIR$/examin/pom.xml" />
         <option value="$PROJECT_DIR$/test/pom.xml" />
+        <option value="$PROJECT_DIR$/user/pom.xml" />
       </list>
     </option>
   </component>

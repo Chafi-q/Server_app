@@ -23,10 +23,6 @@ public class WebSecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.GET, "/api/users")
-//                        .permitAll()
-//                        .requestMatchers("/groups/**")
-//                        .permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .anyRequest().authenticated()
                 )

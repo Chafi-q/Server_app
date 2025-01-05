@@ -114,18 +114,70 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(String id, UserDTO userDTO) {
+        log.info("Updating user with ID: {} and details: {}", id, userDTO);
+
         UsersResource usersResource = getUsersResource();
         UserResource userResource = usersResource.get(id);
-
         UserRepresentation userRepresentation = userResource.toRepresentation();
+
+        // Update basic information
         userRepresentation.setFirstName(userDTO.getFirstName());
         userRepresentation.setLastName(userDTO.getLastName());
         userRepresentation.setEmail(userDTO.getEmail());
         userRepresentation.setUsername(userDTO.getUsername());
 
-        userResource.update(userRepresentation);
-        log.info("User with ID {} updated successfully", id);
+        // Update password if provided
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+            credentialRepresentation.setValue(userDTO.getPassword());
+            credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
+            userResource.resetPassword(credentialRepresentation);
+            log.info("Password updated for user ID: {}", id);
+        }
 
+        // Update attributes
+        Map<String, List<String>> attributes = userRepresentation.getAttributes();
+        if (attributes == null) {
+            attributes = new HashMap<>();
+        }
+
+        if (userDTO.getProfession() != null) {
+            attributes.put("profession", Collections.singletonList(userDTO.getProfession()));
+        }
+        if (userDTO.getNumTel() != null) {
+            attributes.put("numTel", Collections.singletonList(userDTO.getNumTel()));
+        }
+        if (userDTO.getSignature() != null) {
+            attributes.put("signature", Collections.singletonList(userDTO.getSignature()));
+        }
+        userRepresentation.setAttributes(attributes);
+
+        // Update user in Keycloak
+        try {
+            userResource.update(userRepresentation);
+            log.info("User attributes updated for ID: {}", id);
+        } catch (Exception e) {
+            log.error("Failed to update user in Keycloak", e);
+            throw new RuntimeException("Failed to update user in Keycloak: " + e.getMessage());
+        }
+
+        // Update role if specified
+        if (userDTO.getRole() != null) {
+            // Remove existing roles first to avoid duplicates
+            userResource.roles().realmLevel().listAll().forEach(role ->
+                    userResource.roles().realmLevel().remove(Collections.singletonList(role)));
+
+            assignUserRole(id, userDTO.getRole().toUpperCase());
+            log.info("User role updated to {} for ID: {}", userDTO.getRole(), id);
+        }
+
+        // Send verification email if email changed
+        if (!userRepresentation.getEmail().equals(userDTO.getEmail())) {
+            sendVerificationEmail(userDTO.getEmail());
+            log.info("Verification email sent to new email address: {}", userDTO.getEmail());
+        }
+
+        // Return the updated user
         return mapToDTO(userResource.toRepresentation());
     }
 

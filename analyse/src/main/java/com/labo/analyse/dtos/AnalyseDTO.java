@@ -1,8 +1,10 @@
 package com.labo.analyse.dtos;
 
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Data
+@Table(name = "\"analyse\"")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

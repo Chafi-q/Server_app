@@ -124,7 +124,7 @@ services:
 
   utilisateurs:
     build:
-      context: ./utilisateur
+      context: ./user
       dockerfile: Dockerfile
     container_name: utilisateurs
     ports:
@@ -174,9 +174,6 @@ services:
     networks:
       - app-network
 
-
-
-
   examins:
     build:
       context: ./examin
@@ -202,6 +199,39 @@ services:
       - discovery-server
     networks:
       - app-network
+
+
+  # Keycloak Service
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://utilisateurs-db:5432/utilisateurs
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_HOSTNAME: localhost
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8092:8092"
+    networks:
+      - app-network
+    command: ["start-dev", "--http-port=8092"]
+
+  # pgAdmin Service
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - app-network
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
 # Define the network
 networks:
   app-network:

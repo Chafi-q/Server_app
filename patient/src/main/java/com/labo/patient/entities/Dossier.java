@@ -17,9 +17,10 @@ public class Dossier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numDossier;
 
-    private String fkEmailUtilisateur; // Foreign key to user email
-    private Long fkIdPassion;          // Foreign key to passion ID
-    private LocalDate date;
+    @OneToOne
+    @JoinColumn(name = "patient_id", nullable = false, unique = true)
+    private Patient patient;
+    private LocalDate date; //autogenereate
 
     public Long getNumDossier() {
         return numDossier;
@@ -27,22 +28,6 @@ public class Dossier {
 
     public void setNumDossier(Long numDossier) {
         this.numDossier = numDossier;
-    }
-
-    public String getFkEmailUtilisateur() {
-        return fkEmailUtilisateur;
-    }
-
-    public void setFkEmailUtilisateur(String fkEmailUtilisateur) {
-        this.fkEmailUtilisateur = fkEmailUtilisateur;
-    }
-
-    public Long getFkIdPassion() {
-        return fkIdPassion;
-    }
-
-    public void setFkIdPassion(Long fkIdPassion) {
-        this.fkIdPassion = fkIdPassion;
     }
 
     public LocalDate getDate() {

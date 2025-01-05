@@ -9,8 +9,12 @@ eureka:
 spring:
   application:
     name: gateway
+
+
   cloud:
     gateway:
+      default-filters:
+        - PreserveHostHeader
       discovery:
         locator:
           enabled: true
@@ -18,26 +22,22 @@ spring:
         - id: utilisateurs
           uri: lb://utilisateurs
           predicates:
-            - Path=/api/v1/utilisateurs/**
+            - Path=/api/users/**, /roles/**, /groups/**
 
         - id: laboratoires
           uri: lb://laboratoires
           predicates:
-            - Path=/api/v1/laboratoires/**
-            - Path=/api/v1/contacts/**
-            - Path=/api/v1/adresses/**
+            - Path=/api/v1/laboratoires/**, /api/v1/contacts/**, /api/v1/adresses/**
 
         - id: patients
           uri: lb://patients
           predicates:
-            - Path=/api/v1/patients/**
-            - Path=/api/v1/dossiers/**
+            - Path=/api/v1/patients/**, /api/v1/dossiers/**
 
         - id: analyses
           uri: lb://analyses
           predicates:
-            - Path=/api/v1/analyses/**
-            - Path=/api/v1/epreuves/**
+            - Path=/api/v1/analyses/**, /api/v1/epreuves/**
 
         - id: examins
           uri: lb://examins
@@ -48,6 +48,17 @@ spring:
           uri: lb://tests
           predicates:
             - Path=/api/v1/tests/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}
+
+app:
+  keycloak:
+    realm: ${APP_KEYCLOAK_REALM}
+    serverUrl: ${APP_KEYCLOAK_SERVER_URL}
 #  security:
 #    oauth2:
 #      resourceserver:

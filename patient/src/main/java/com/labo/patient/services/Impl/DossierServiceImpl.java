@@ -2,57 +2,61 @@ package com.labo.patient.services.Impl;
 
 import com.labo.patient.dtos.DossierDTO;
 import com.labo.patient.entities.Dossier;
+import com.labo.patient.entities.Patient;
 import com.labo.patient.repositories.DossierRepository;
+import com.labo.patient.repositories.PatientRepository;
 import com.labo.patient.services.DossierService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class DossierServiceImpl implements DossierService {
 
     @Autowired
-    private DossierRepository repository;
+    private final DossierRepository dossierRepository;
+    private final PatientRepository patientRepository;
 
-    public DossierDTO saveDossier(DossierDTO dto) {
-        Dossier entity = mapToEntity(dto);
-        Dossier savedEntity = repository.save(entity);
-        return mapToDTO(savedEntity);
+    public Dossier createDossier(Long patientId, LocalDate date) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with ID: " + patientId));
+
+        if (patient.getDossier() != null) {
+            throw new IllegalStateException("Patient already has a dossier");
+        }
+
+        Dossier dossier = new Dossier();
+        dossier.setPatient(patient);
+        dossier.setDate(date);
+
+        return dossierRepository.save(dossier);
     }
 
-    public List<DossierDTO> getAllDossiers() {
-        return repository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    public Dossier getDossierByPatientId(Long patientId) {
+        return dossierRepository.findByPatientId(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Dossier not found for patient ID: " + patientId));
     }
 
-    public DossierDTO getDossierById(Long id) {
-        return repository.findById(id)
-                .map(this::mapToDTO)
-                .orElseThrow(() -> new RuntimeException("Dossier not found"));
+    public void deleteDossier(Long dossierId) {
+        if (!dossierRepository.existsById(dossierId)) {
+            throw new EntityNotFoundException("Dossier not found with ID: " + dossierId);
+        }
+        dossierRepository.deleteById(dossierId);
     }
 
-    public void deleteDossier(Long id) {
-        repository.deleteById(id);
+    public List<Dossier> getAllDossiers() {
+        return dossierRepository.findAll();
     }
 
-    private Dossier mapToEntity(DossierDTO dto) {
-        Dossier entity = new Dossier();
-        entity.setNumDossier(dto.getNumDossier());
-        entity.setFkEmailUtilisateur(dto.getFkEmailUtilisateur());
-        entity.setFkIdPassion(dto.getFkIdPassion());
-        entity.setDate(dto.getDate());
-        return entity;
+    public Dossier getDossierById(Long id) {
+        return dossierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Dossier not found with ID: " + id));
     }
 
-    private DossierDTO mapToDTO(Dossier entity) {
-        DossierDTO dto = new DossierDTO();
-        dto.setNumDossier(entity.getNumDossier());
-        dto.setFkEmailUtilisateur(entity.getFkEmailUtilisateur());
-        dto.setFkIdPassion(entity.getFkIdPassion());
-        dto.setDate(entity.getDate());
-        return dto;
-    }
 }

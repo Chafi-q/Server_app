@@ -21,20 +21,4 @@ public class Dossier {
     @JoinColumn(name = "patient_id", nullable = false, unique = true)
     private Patient patient;
     private LocalDate date; //autogenereate
-
-    public Long getNumDossier() {
-        return numDossier;
-    }
-
-    public void setNumDossier(Long numDossier) {
-        this.numDossier = numDossier;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }

@@ -18,6 +18,9 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
+    private Dossier dossier;
+
     private String nomComplet;
 
     private LocalDate dateNaissance;

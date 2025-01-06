@@ -127,7 +127,6 @@ jobs:
 
       - name: Push Docker Images
         run: |
-          docker push $DOCKER_USERNAME/config-server:latest
           docker push $DOCKER_USERNAME/discovery-server:latest
           docker push $DOCKER_USERNAME/gateway:latest
           docker push $DOCKER_USERNAME/user:latest

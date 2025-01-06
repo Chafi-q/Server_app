@@ -17,8 +17,6 @@ public class KeycloakConfig {
     private String realm;
     @Value("${app.keycloak.serverUrl}")
     private String serverUrl;
-
-
     @Bean
     public Keycloak keycloak(){
 

@@ -23,7 +23,7 @@ jobs:
         run: |
           mvn -f discovery-server clean compile
           mvn -f gateway clean compile
-          mvn -f utilisateur clean compile
+          mvn -f user clean compile
           mvn -f laboratoire clean compile
           mvn -f patient clean compile
           mvn -f analyse clean compile
@@ -47,7 +47,7 @@ jobs:
   # -pl flag stands for "project list"
       - name: Running Unit Tests
         run: |
-          mvn -f utilisateur clean test
+          mvn -f user clean test
           mvn -f laboratoire clean test
           mvn -f patient clean test
           mvn -f analyse clean test
@@ -74,7 +74,7 @@ jobs:
           mvn -f discovery-server clean package -DskipTests=true
           mvn -f gateway clean package -DskipTests=true
           mvn -f laboratoire clean package -DskipTests=true
-          mvn -f utilisateur clean package -DskipTests=true
+          mvn -f user clean package -DskipTests=true
           mvn -f patient clean package -DskipTests=true
           mvn -f analyse clean package -DskipTests=true
           mvn -f examin clean package -DskipTests=true
@@ -118,7 +118,7 @@ jobs:
           docker build -t $DOCKER_USERNAME/discovery-server:latest -f ./discovery-server/Dockerfile ./discovery-server
           docker build -t $DOCKER_USERNAME/gateway:latest -f ./gateway/Dockerfile ./gateway
           docker build -t $DOCKER_USERNAME/laboratoire:latest -f ./laboratoire/Dockerfile ./laboratoire
-          docker build -t $DOCKER_USERNAME/utilisateur:latest -f ./utilisateur/Dockerfile ./utilisateur
+          docker build -t $DOCKER_USERNAME/user:latest -f ./user/Dockerfile ./user
           
           docker build -t $DOCKER_USERNAME/patient:latest -f ./patient/Dockerfile ./patient
           docker build -t $DOCKER_USERNAME/analyse:latest -f ./analyse/Dockerfile ./analyse
@@ -130,7 +130,7 @@ jobs:
           docker push $DOCKER_USERNAME/config-server:latest
           docker push $DOCKER_USERNAME/discovery-server:latest
           docker push $DOCKER_USERNAME/gateway:latest
-          docker push $DOCKER_USERNAME/utilisateur:latest
+          docker push $DOCKER_USERNAME/user:latest
           docker push $DOCKER_USERNAME/laboratoire:latest
           docker push $DOCKER_USERNAME/patient:latest
           docker push $DOCKER_USERNAME/analyse:latest
